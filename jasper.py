@@ -10,6 +10,7 @@ import yaml
 import argparse
 
 from client import tts, stt, jasperpath, diagnose, audioengine, brain
+from client import pluginstore
 
 # Add jasperpath.LIB_PATH to sys.path
 sys.path.append(jasperpath.LIB_PATH)
@@ -148,8 +149,16 @@ class Jasper(object):
             logger.warning('Valid output devices: %s', ', '.join(devices))
             raise
 
-        # Initialize Mic
+        self.plugins = pluginstore.PluginStore([jasperpath.PLUGIN_PATH])
+        self.plugins.detect_plugins()
+
+        # Initialize Brain
         self.brain = brain.Brain()
+        for info in self.plugins.get_plugins_by_category('speechhandler'):
+            plugin = info.plugin_class(info, self.config)
+            self.brain.add_plugin(plugin)
+
+        # Initialize Mic
         self.mic = Mic(
             input_device, output_device,
             passive_stt_engine_class.get_instance(
