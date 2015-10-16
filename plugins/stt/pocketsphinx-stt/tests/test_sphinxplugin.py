@@ -2,7 +2,8 @@
 # -*- coding: utf-8-*-
 import unittest
 import imp
-from client import stt, jasperpath
+from client import jasperpath
+from .. import sphinxplugin
 
 
 def cmuclmtk_installed():
@@ -31,10 +32,8 @@ class TestSTT(unittest.TestCase):
         self.jasper_clip = jasperpath.data('audio', 'jasper.wav')
         self.time_clip = jasperpath.data('audio', 'time.wav')
 
-        self.passive_stt_engine = stt.PocketSphinxSTT.get_instance(
-            'unittest-passive', ['JASPER'])
-        self.active_stt_engine = stt.PocketSphinxSTT.get_instance(
-            'unittest-active', ['TIME'])
+        self.passive_stt_engine = sphinxplugin.PocketsphinxSTTPlugin('unittest-passive', ['JASPER'])
+        self.active_stt_engine = sphinxplugin.PocketSphinxSTTPlugin('unittest-active', ['TIME'])
 
     def testTranscribeJasper(self):
         """
