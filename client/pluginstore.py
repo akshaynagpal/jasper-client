@@ -150,6 +150,7 @@ class PluginStore(object):
         self._translations_dirname = PLUGIN_TRANSLATIONS_DIRNAME
         self._categories_map = {
             'speechhandler': plugin.SpeechHandlerPlugin,
+            'tts': plugin.TTSPlugin,
             'stt': plugin.STTPlugin
         }
 
